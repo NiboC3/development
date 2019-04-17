@@ -1,0 +1,53 @@
+- hosts: localhost
+  vars:
+    title_var: doku_wiki setup playbook
+    src_url: http://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
+  tasks:
+    - debug:
+        msg: "{{title_var}}"
+
+    - name: update packages
+      yum:
+        name: '*'
+        state: latest
+      register: test_ret
+
+    - name: latest check
+      yum:
+        name: '*'
+        state: latest
+      register: test_ret
+
+    - name: update packages debug result
+      debug:
+        msg: "{{test_ret.results}}"
+
+    - name: install packages
+      yum:
+        name: "{{packages}}"
+      vars:
+        packages:
+          - wget
+          - httpd
+
+    - name: wget src
+      shell: wget "{{src_url}}"
+
+    - name: untar
+      shell: tar zxfvp dokuwiki-stable.tgz
+
+    - name: mv -> www/html
+      shell: mv dokuwiki-2* /var/www/html/dokuwiki
+
+    - name: chown
+      shell: chown -R apache:apache /var/www/html/dokuwiki
+
+    - name: stop firewall
+      systemd:
+        name: firewalld
+        state: stopped
+
+    - name: start httpd
+      systemd:
+        name: httpd
+        state: started
