@@ -1,0 +1,13 @@
+#install_httpd.yml
+
+- name: httpdのインストール
+  yum:
+    name: "{{packages}}"
+  vars:
+    packages:
+      - httpd
+
+- name: start httpd
+  systemd:
+    name: httpd
+    state: started

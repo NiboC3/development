@@ -1,0 +1,9 @@
+#SELinux無効化
+
+- name: SELinux無効化 設定の編集
+  lineinfile: >-
+    dest='/etc/selinux/config'
+    state=present
+    backrefs=yes
+    regexp='^SELINUX=enforcing'
+    line='SELINUX=disabled'
