@@ -1,0 +1,10 @@
+#ベースOS centOS7
+FROM centos:7
+#httpd(apache)install
+RUN yum install -y httpd
+#index.htmlを上書き
+RUN echo "test docker file" > /var/www/html/index.html
+#OS起動時に起動状態で設定
+RUN systemctl enable httpd
+
+
