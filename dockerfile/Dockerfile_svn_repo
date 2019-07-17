@@ -1,0 +1,51 @@
+#ベースOS centOS7
+FROM centos:7
+
+#ファイル内変数
+ARG proxy_user="decobisu"
+ARG proxy_pass="password"
+ARG proxy_server="http://proxy.example.com:xxxx"
+
+ARG repo_name="/repos"
+
+##<proxyを使用する場合:ここから>
+#使わない場合はコメントアウト
+#使わないのに設定するとproxy見に行くから逆にエラーになる
+
+#yumコマンドで使用できるよう設定
+#RUN echo " " >> /etc/yum.conf
+#RUN echo "proxy = "${proxy_server} >> /etc/yum.conf
+
+# ユーザ認証が必要な場合
+#RUN echo "proxy_username = "${proxy_user} >> /etc/yum.conf
+#RUN echo "proxy_password = "${proxy_pass} >> /etc/yum.conf
+
+##<proxyを使用する場合:ここまで>
+
+
+#svn構築参考サイト(http://park1.wakwak.com/~ima/centos4_subversion0001.html)
+
+##以下セットアップ
+#パッケージ最新化とSVNインストール
+
+RUN yum -y update && yum install -y subversion
+
+#リポジトリの物理格納先は/var/svnがデフォルト
+RUN mkdir -p /var/svn${repo_name}
+RUN svnadmin create /var/svn${repo_name}
+
+#権限変更
+RUN chmod -R 755 /var/svn
+
+#トランク ブランチ タグのディレクトリ作成
+RUN svn mkdir file://localhost/var/svn${repo_name}/trunk -m "create"
+RUN svn mkdir file://localhost/var/svn${repo_name}/branches -m "create"
+RUN svn mkdir file://localhost/var/svn${repo_name}/tags -m "create"
+
+#スナップショット作成（あまり意味ないけど好みで）
+RUN svn copy file://localhost/var/svn${repo_name}/trunk file://localhost/var/svn${repo_name}/tags/release-1.1 -m "Release 1.0"
+
+#OS起動時に起動状態で設定
+RUN systemctl enable svnserve.service
+
+
