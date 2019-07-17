@@ -1,0 +1,27 @@
+- hosts: localhost
+  vars:
+    title_var: svn生成用playbook
+    repo_name: 
+  tasks:
+    - debug:
+        msg: "{{title_var}}"
+
+    - name: 今回必要なもののインストール
+      yum:
+        name: "{{packages}}"
+      vars:
+        packages:
+          - subversion
+
+    - name: ディレクトリ作成
+      file: path=/home/svn/repos/{{repo_name}}
+            state=directory
+            owner=root
+            group=root
+            mode=0755
+
+    - name: aaa
+      shell: svnadmin create /home/svn/repos/kizm_edi_prj
+
+    - name: aaa
+      shell: svnadmin create /home/svn/repos/kizm_edi_prj
