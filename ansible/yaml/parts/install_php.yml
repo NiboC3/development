@@ -1,0 +1,27 @@
+#php_install.yml
+
+- name: install wget
+  yum:
+    name: "{{packages}}"
+  vars:
+    packages:
+      - wget
+
+- name: wget remi repo
+  shell: "wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm"
+- name: rpm remi repo
+  shell: "rpm -Uvh remi-release-7.rpm"
+  ignore_errors: yes
+
+- name: install php
+  shell: "yum install -y --enablerepo=remi,remi-php56 php php-devel php-mbstring php-pdo php-gd php-xml php-mcrypt"
+
+- name: php用 sample ファイル配置
+  shell: "echo '<?php phpinfo() ?>' > /var/www/html/info.php"
+  args:
+    creates: "/var/www/html/info.php"
+
+- name: restart httpd
+  systemd:
+    name: httpd
+    state: restarted

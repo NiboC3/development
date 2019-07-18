@@ -1,4 +1,4 @@
-- hosts: test
+- hosts: sample
   vars:
     title_var: doku_wikiのsetup用playbook
     src_url: http://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
@@ -7,13 +7,13 @@
         msg: "{{title_var}}"
 
     - name: update_package
-      include: parts/update_package.yml
+      include_tasks: parts/update_package.yml
 
-    - include: parts/install_httpd.yml
+    - include_tasks: parts/install_httpd.yml
 
-    - include: parts/install_php.yml
+    - include_tasks: parts/install_php.yml
 
-    - include: parts/Invalidation_selinux.yml
+    - include_tasks: parts/Invalidation_selinux.yml
 
 
     - name: 今回必要なもののインストール
@@ -35,5 +35,8 @@
     - name: apacheの権限付与
       shell: chown -R apache:apache /var/www/html/dokuwiki
 
-    - name: update_package
-      include: parts/setting_systemd_httpd.yml
+    - name: setting_systemd_httpd
+      include_tasks: parts/setting_systemd_httpd.yml
+
+    - debug:
+        msg: "再起動してください"

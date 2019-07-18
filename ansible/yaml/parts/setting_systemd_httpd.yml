@@ -1,9 +1,9 @@
-- name: 【暫定】ファイアウォール停止
+- name: stop firewalld
   systemd:
     name: firewalld
     state: stopped
 
-- name: httpd起動
+- name: start httpd
   systemd:
     name: httpd
     enabled: yes

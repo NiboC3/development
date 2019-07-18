@@ -1,17 +1,17 @@
 #update_package.yml
 
-- name: パッケージ群の更新
+- name: update
   yum:
     name: '*'
     state: latest
   register: test_ret
 
-- name: 上記更新結果の確認
+- name: check
   yum:
     name: '*'
     state: latest
   register: test_ret
 
-- name: 確認結果表示
+- name: return
   debug:
     msg: "{{test_ret.results}}"
