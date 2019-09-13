@@ -9,23 +9,23 @@
 #===========================================================================
 
 #設定ファイル格納先
-v_cnf_path=/lint
+v_cnf_path=`pwd`/lintset.ini
 
 #カレントディレクトリパス
 v_cur_path=`pwd`
-#ログファイルパス
+#ログファイル
 v_log=/logs.sh
 #取り込み変数展開（iniファイル）
 v_ini_tmp="`./iniparser.sh ${v_cnf_path}`"
 eval "${v_ini_tmp}"
 
 #結果出力ファイル
-v_out_file=${v_cnf_path}/resurtfile
+v_out_file=`pwd`/resurtfile
 
-echo "${test1}"
-echo "${test2}"
-echo "${test3}"
-echo "${test4}"
+echo "${test_test1}"
+echo "${test_test2}"
+echo "${test_test3}"
+echo "${test_test4}"
 
 #開始ログ出力（msgは使いまわし）
 v_msg="script start "
